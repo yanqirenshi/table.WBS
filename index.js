@@ -1,3 +1,3 @@
-import WBSTable from './src/WbsTable.js';
+import WBSTable from './src/WBSTable.js';
 
 export default WBSTable;
