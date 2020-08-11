@@ -16,6 +16,7 @@ function WBSTable (props) {
     });
 
     const style = props.style || {};
+
     return (
         <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
                style={style}>
