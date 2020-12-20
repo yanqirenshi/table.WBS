@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ButtonVisible from './ButtonVisible.js';
+
 const style = {
     root: {
         padding: 11 ,
@@ -36,10 +38,11 @@ function ChooserColumn (props) {
               {columns.map((d,i) => {
                   return <tr key={i}>
                            <td style={{width: 66, textAlign: 'center'}}>
-                             {d.required===true && <p style={{color:'#ccc'}} >必須</p>}
-                             {d.required!==true && <button className="button is-small">
-                                                     表示
-                                                   </button>}
+                             {d.required===true
+                              && <p style={{color:'#ccc'}} >必須</p>}
+                             {d.required!==true
+                              && <ButtonVisible source={d}
+                                                callbacks={props.callbacks}/>}
                            </td>
                            <td>
                              {d.label}

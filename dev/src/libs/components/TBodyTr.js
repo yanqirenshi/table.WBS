@@ -17,8 +17,14 @@ const colSpan = (leveling, level, max_lev) => {
     return (max_lev + 1) - level;
 };
 
-function TBodyTr (props) {
+const cells = (props) => {
+    const out = [];
+
     const row = props.source;
+    const callbacks = props.callbacks;
+    const max_level = props.max_level;
+    const columns = props.columns;
+
     const style = {
         cell: {
             borderLeft: 'none',
@@ -31,26 +37,36 @@ function TBodyTr (props) {
         },
     };
 
-    return (
-        <tr>
-          {props.columns.map((column, i) => {
-              const leveling = column.leveling;
-              const level = leveling ? row._level : 0;
+    let key = 0;
+    for (const column of columns) {
+        const leveling = column.leveling;
+        const level = leveling ? row._level : 0;
+        const number = column.number;
 
-              return <>
-                       {makeLevelingSpace(level).map((d,j) => {
-                           return <td key={'col-space-'+j}
-                                      style={leveling && style.cell_s}>
-                                  </td>;
-                       })}
-                       <td key={'col-'+i}
-                           style={leveling && style.cell}
-                           colSpan={colSpan(column.leveling, level, props.max_level)}>
-                         {column.contents(column, row, i)}
-                       </td>
-                     </>;
-          })}
-        </tr>
+        makeLevelingSpace(level).map((d,j) => {
+            out.push(
+                <td key={key++}
+                    style={leveling && style.cell_s}>
+                </td>
+            );
+        });
+
+        out.push(
+            <td key={key++}
+                style={leveling && style.cell}
+                colSpan={colSpan(column.leveling, level, max_level)}
+                callbacks={callbacks}>
+              {column.contents(column, row, key)}
+            </td>
+        );
+    }
+
+    return out;
+};
+
+function TBodyTr (props) {
+    return (
+        <tr>{cells(props)}</tr>
     );
 }
 
