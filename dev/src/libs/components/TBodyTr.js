@@ -35,6 +35,13 @@ const cells = (props) => {
             borderRight: 'none',
             width: 22,
         },
+        cell_s_first: {
+            borderRight: 'none',
+            width: 22,
+        },
+        cell_last: {
+            borderLeft: 'none',
+        },
     };
 
     let key = 0;
@@ -46,14 +53,14 @@ const cells = (props) => {
         makeLevelingSpace(level).map((d,j) => {
             out.push(
                 <td key={key++}
-                    style={leveling && style.cell_s}>
+                    style={leveling && j===0 ? style.cell_s_first : style.cell_s}>
                 </td>
             );
         });
 
         out.push(
             <td key={key++}
-                style={leveling && style.cell}
+                style={leveling && (level===0 ? {} : style.cell_last)}
                 colSpan={colSpan(column.leveling, level, max_level)}
                 callbacks={callbacks}>
               {column.contents(column, row, key)}
