@@ -1,8 +1,8 @@
 {
     "name": "@yanqirenshi/table.wbs",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "",
-    "main": "dist/WBSTable.js",
+    "main": "dist/index.js",
     "scripts": {
         "test": "jest",
         "test:w": "jest --watch",

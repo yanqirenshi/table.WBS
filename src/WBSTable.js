@@ -1,12 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import BodyTr from './BodyTr';
 import Asshole from '@yanqirenshi/wnqi.big.size';
+import {Core} from './index.js';
+
+import * as Comps from './Components.js';
 
 const ASSHOLE = new Asshole();
 
 function WBSTable (props) {
-    const columns = props.columns;
+    const [columns, setColumns] = useState(new Core().makeColumns(props.columns));
+    const [chooser_column, setChooserColumn] = useState(false);
+
+    const style = props.style || {};
+
+    const callbacks = {
+        chooser: {
+            switch: () => {
+                setChooserColumn(!chooser_column);
+            },
+        },
+        body: {
+            row: {
+                visible: (number, v) => {
+                    const new_columns = columns.map(d => Object.assign(d));
+
+                    const col = new_columns.find(d => d.number===number);
+
+                    col.visible = v;
+
+                    setColumns(new_columns);
+                }
+            },
+        },
+    };
+
 
     const records = ASSHOLE.build({
         data: props.source,
@@ -15,25 +42,36 @@ function WBSTable (props) {
         flatten: true,
     });
 
-    const style = props.style || {};
+    const max_lev = records.reduce((lev, d) => {
+        return d._level > lev ? d._level : lev;
+    }, 0);
 
+    const columns_filterd = columns.filter(d => d.visible);
     return (
-        <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
-               style={style}>
-          <thead>
-            <tr>
-              {columns.map((d, i)=> {
-                  return <th key={i}>{d.label}</th>;
-              })}
-            </tr>
-          </thead>
+        <div>
+          <div>
+            <Comps.Controller open={chooser_column}
+                              callbacks={callbacks} />
 
-          <tbody>
-            {records.map((d) => {
-                return <BodyTr key={d._id} source={d} columns={columns} />;
-            })}
-          </tbody>
-        </table>
+            {chooser_column &&
+             <div style={{marginBottom: 11}}>
+               <Comps.ChooserColumn columns={columns}
+                                    callbacks={callbacks} />
+             </div>}
+          </div>
+
+          <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+                 style={style}>
+
+            <Comps.THead columns={columns_filterd}
+                         max_level={max_lev} />
+
+            <Comps.TBody columns={columns_filterd}
+                         max_level={max_lev}
+                         records={records}
+                         callbacks={callbacks} />
+          </table>
+        </div>
     );
 }
 
