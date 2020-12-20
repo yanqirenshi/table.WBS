@@ -17,13 +17,14 @@ function ChooserColumn (props) {
             <thead>
               <tr style={{background:'rgba(252, 200, 0, 0.3)'}}>
                 <th rowSpan="2"></th>
-                <th colSpan="2">基本</th>
+                <th colSpan="3">基本</th>
                 <th colSpan="3">文字</th>
                 <th colSpan="1">背景</th>
               </tr>
               <tr style={{background:'rgba(252, 200, 0, 0.3)'}}>
                 <th>Label</th>
                 <th>Width</th>
+                <th>Leveling</th>
                 <th>Size</th>
                 <th>Color</th>
                 <th>Bold</th>
@@ -34,15 +35,19 @@ function ChooserColumn (props) {
             <tbody>
               {columns.map((d,i) => {
                   return <tr key={i}>
-                           <td style={{width: 66}}>
-                             <button className="button is-small" disabled>
-                               表示
-                             </button>
+                           <td style={{width: 66, textAlign: 'center'}}>
+                             {d.required===true && <p style={{color:'#ccc'}} >必須</p>}
+                             {d.required!==true && <button className="button is-small">
+                                                     表示
+                                                   </button>}
                            </td>
                            <td>
                              {d.label}
                            </td>
                            <td>--</td>
+                           <td>
+                             {d.leveling ? '○' : '×'}
+                           </td>
                            <td>--</td>
                            <td>--</td>
                            <td>--</td>

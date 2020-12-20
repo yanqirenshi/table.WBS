@@ -1,7 +1,5 @@
 import React from 'react';
 
-import FormInput from './FormInput.js';
-
 const style = {
     root: {
         display:'flex',
@@ -32,7 +30,6 @@ function Controller (props) {
     return (
         <div style={style.root}>
           <div style={style.left}>
-            {/* <FormInput /> */}
           </div>
 
           <div style={style_right}>

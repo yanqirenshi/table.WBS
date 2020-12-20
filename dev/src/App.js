@@ -1,27 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import 'bulma/css/bulma.min.css';
 
-import WBSTable, {Core} from './libs/index.js';
+import WBSTable from './libs/index.js';
 
 import * as WBS_DATA from './Data.js';
 
-
 function App() {
-    const [core] = useState(new Core());
-
     const columns = [
         {
             label: 'Code',
+            required: true,
             contents: (c, d) => {
                 return <>{d._id}</>;
             }
         },
         {
             label: 'Name',
+            required: true,
+            leveling: true,
             contents: (c, d) => {
                 return <>
-                         <span>{core.margin(d._level)}</span>
                          <span>{d.label}</span>
                        </>;
             },

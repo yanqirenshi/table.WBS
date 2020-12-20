@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-
 import Asshole from '@yanqirenshi/wnqi.big.size';
 
 import * as Comps from './Components.js';
@@ -9,15 +8,6 @@ const ASSHOLE = new Asshole();
 
 function WBSTable (props) {
     const [chooser_column, setChooserColumn] = useState(false);
-
-    const columns = props.columns;
-
-    const records = ASSHOLE.build({
-        data: props.source,
-        options: props.options,
-        start_id: props.start_id,
-        flatten: true,
-    });
 
     const style = props.style || {};
 
@@ -28,6 +18,21 @@ function WBSTable (props) {
             },
         },
     };
+
+    const columns = props.columns;
+
+    const records = ASSHOLE.build({
+        data: props.source,
+        options: props.options,
+        start_id: props.start_id,
+        flatten: true,
+    });
+
+    const max_lev = records.reduce((lev, d) => {
+        return d._level > lev ? d._level : lev;
+    }, 0);
+
+    console.log(max_lev);
 
     return (
         <div>
@@ -42,8 +47,8 @@ function WBSTable (props) {
 
           <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
                  style={style}>
-            <Comps.THead columns={columns} />
-            <Comps.TBody columns={columns} records={records} />
+            <Comps.THead columns={columns} max_level={max_lev} />
+            <Comps.TBody columns={columns} max_level={max_lev} records={records} />
           </table>
         </div>
     );
