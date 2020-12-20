@@ -4,26 +4,21 @@ import WBSTable from '@yanqirenshi/table.wbs';
 
 import * as WBS_DATA from './data.js';
 
-const margin = (level) => {
-    let out = "";
-    for (let i=0; i<level ;i++)
-        out += "　";
-    return out;
-};
-
 function PageExample() {
     const columns = [
         {
             label: 'Code',
+            leveling: true,
+            required: true,
             contents: (c, d) => {
                 return <>{d._id}</>;
             }
         },
         {
             label: 'Name',
+            required: true,
             contents: (c, d) => {
                 return <>
-               <span>{margin(d._level)}</span>
                <span>{d.label}</span>
              </>;
             },
