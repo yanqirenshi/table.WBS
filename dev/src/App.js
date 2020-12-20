@@ -1,17 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import WBSTable from '@yanqirenshi/table.wbs';
+import 'bulma/css/bulma.min.css';
 
-import * as WBS_DATA from './data.js';
+import WBSTable, {Core} from './libs/index.js';
 
-const margin = (level) => {
-    let out = "";
-    for (let i=0; i<level ;i++)
-        out += "　";
-    return out;
-};
+import * as WBS_DATA from './Data.js';
 
-function PageExample() {
+
+function App() {
+    const [core] = useState(new Core());
+
     const columns = [
         {
             label: 'Code',
@@ -23,9 +21,9 @@ function PageExample() {
             label: 'Name',
             contents: (c, d) => {
                 return <>
-               <span>{margin(d._level)}</span>
-               <span>{d.label}</span>
-             </>;
+                         <span>{core.margin(d._level)}</span>
+                         <span>{d.label}</span>
+                       </>;
             },
         },
         {
@@ -46,13 +44,17 @@ function PageExample() {
     const options = {}; // or null
     const style_table = { fontSize: '16px' }; // or null
     return (
-        <div style={{padding: '33px'}}>
-          <WBSTable source={wbs_source}
-                    columns={columns}
-                    options={options}
-                    style={style_table}/>
-        </div>
+        <section className="section">
+          <div className="container">
+            <h1 className="title">WBS Table</h1>
+
+            <WBSTable source={wbs_source}
+                      columns={columns}
+                      options={options}
+                      style={style_table}/>
+          </div>
+        </section>
     );
 }
 
-export default PageExample;
+export default App;

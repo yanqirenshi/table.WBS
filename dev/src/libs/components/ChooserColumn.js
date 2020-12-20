@@ -1,0 +1,59 @@
+import React from 'react';
+
+const style = {
+    root: {
+        padding: 11 ,
+        background: '#f3f3f3',
+        borderRadius: '8px 0px 8px 8px',
+    },
+};
+
+function ChooserColumn (props) {
+    const columns = props.columns || [];
+
+    return (
+        <div style={style.root}>
+          <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+              <tr style={{background:'rgba(252, 200, 0, 0.3)'}}>
+                <th rowSpan="2"></th>
+                <th colSpan="2">基本</th>
+                <th colSpan="3">文字</th>
+                <th colSpan="1">背景</th>
+              </tr>
+              <tr style={{background:'rgba(252, 200, 0, 0.3)'}}>
+                <th>Label</th>
+                <th>Width</th>
+                <th>Size</th>
+                <th>Color</th>
+                <th>Bold</th>
+                <th>Color</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {columns.map((d,i) => {
+                  return <tr key={i}>
+                           <td style={{width: 66}}>
+                             <button className="button is-small" disabled>
+                               表示
+                             </button>
+                           </td>
+                           <td>
+                             {d.label}
+                           </td>
+                           <td>--</td>
+                           <td>--</td>
+                           <td>--</td>
+                           <td>--</td>
+                           <td>--</td>
+                         </tr>;
+              })}
+            </tbody>
+          </table>
+
+        </div>
+    );
+}
+
+export default ChooserColumn;
