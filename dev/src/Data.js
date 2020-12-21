@@ -2,21 +2,21 @@ export const PROJECTS = [
     {
         _id: 1,
         _class: 'PROJECT',
-        label: 'a',
+        label: 'LEVEL 01',
     }
 ];
 export const WBS = [
     {
         _id: 10,
         _class: 'WBS',
-        label: 'b',
+        label: 'LEVEL 02',
     }
 ];
 export const WORKPACKAGES = [
     {
         _id: 100,
         _class: 'WORKPACKAGE',
-        label: 'c',
+        label: 'LEVEL 03',
     }
 ];
 

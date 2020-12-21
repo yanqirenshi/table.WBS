@@ -71,9 +71,22 @@ const cells = (props) => {
     return out;
 };
 
+const trStyle = (props) => {
+    if (props.source._class==="WORKPACKAGE")
+        return  { fontWeight: 'bold' };
+
+    const x = props.max_level + 1 - props.source._level;
+
+    return {fontSize: 14 + x * 2};
+}
+
 function TBodyTr (props) {
+    trStyle(props);
+
     return (
-        <tr>{cells(props)}</tr>
+        <tr style={trStyle(props)}>
+          {cells(props)}
+        </tr>
     );
 }
 
