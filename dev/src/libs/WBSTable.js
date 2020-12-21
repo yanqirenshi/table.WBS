@@ -9,6 +9,7 @@ const ASSHOLE = new Asshole();
 
 function WBSTable (props) {
     const [columns, setColumns] = useState(new Core().makeColumns(props.columns));
+    const [visible_wp, setVisibleWp] = useState(true);
     const [chooser_column, setChooserColumn] = useState(false);
 
     const style = props.style || {};
@@ -18,6 +19,11 @@ function WBSTable (props) {
             switch: () => {
                 setChooserColumn(!chooser_column);
             },
+        },
+        wp: {
+            visible: (v) => {
+                setVisibleWp(v);
+            }
         },
         body: {
             row: {
@@ -51,6 +57,7 @@ function WBSTable (props) {
         <div>
           <div>
             <Comps.Controller open={chooser_column}
+                              visible_wp={visible_wp}
                               callbacks={callbacks} />
 
             {chooser_column &&
@@ -69,7 +76,8 @@ function WBSTable (props) {
             <Comps.TBody columns={columns_filterd}
                          max_level={max_lev}
                          records={records}
-                         callbacks={callbacks} />
+                         callbacks={callbacks}
+                         visible_wp={visible_wp} />
           </table>
         </div>
     );
