@@ -62,7 +62,8 @@ const cells = (props) => {
             <td key={key++}
                 style={leveling && (level===0 ? {} : style.cell_last)}
                 colSpan={colSpan(column.leveling, level, max_level)}
-                callbacks={callbacks}>
+                callbacks={callbacks}
+                nowrap={column.nowrap ? 'true' : null}>
               {column.contents(column, row, key)}
             </td>
         );
