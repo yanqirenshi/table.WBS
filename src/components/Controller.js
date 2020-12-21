@@ -23,13 +23,18 @@ function Controller (props) {
     if (props.open)
         style_right.background = '#f3f3f3';
 
-    const clickColumns = () => {
-        props.callbacks.chooser.switch();
-    };
+    const callbacks = props.callbacks;
+    const clickColumns = () => callbacks.chooser.switch();
+    const clickSwidthVisibleWp = () => callbacks.wp.visible(!props.visible_wp);
 
     return (
         <div style={style.root}>
           <div style={style.left}>
+            <button className={props.visible_wp ? "button is-warning" : "button"}
+                    title="Workpackage の表示/非表示を切り替える"
+                    onClick={clickSwidthVisibleWp}>
+              Workpackage
+            </button>
           </div>
 
           <div style={style_right}>

@@ -62,7 +62,8 @@ const cells = (props) => {
             <td key={key++}
                 style={leveling && (level===0 ? {} : style.cell_last)}
                 colSpan={colSpan(column.leveling, level, max_level)}
-                callbacks={callbacks}>
+                callbacks={callbacks}
+                nowrap={column.nowrap ? 'true' : null}>
               {column.contents(column, row, key)}
             </td>
         );
@@ -71,9 +72,22 @@ const cells = (props) => {
     return out;
 };
 
+const trStyle = (props) => {
+    if (props.source._class==="WORKPACKAGE")
+        return  { fontWeight: 'bold' };
+
+    const x = props.max_level + 1 - props.source._level;
+
+    return {fontSize: 14 + x * 2};
+}
+
 function TBodyTr (props) {
+    trStyle(props);
+
     return (
-        <tr>{cells(props)}</tr>
+        <tr style={trStyle(props)}>
+          {cells(props)}
+        </tr>
     );
 }
 
