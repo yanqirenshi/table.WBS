@@ -73,7 +73,8 @@ var cells = function cells(props) {
         key: key++,
         style: leveling && (level === 0 ? {} : style.cell_last),
         colSpan: colSpan(column.leveling, level, max_level),
-        callbacks: callbacks
+        callbacks: callbacks,
+        nowrap: column.nowrap ? 'true' : null
       }, column.contents(column, row, key)));
     };
 
@@ -89,8 +90,21 @@ var cells = function cells(props) {
   return out;
 };
 
+var trStyle = function trStyle(props) {
+  if (props.source._class === "WORKPACKAGE") return {
+    fontWeight: 'bold'
+  };
+  var x = props.max_level + 1 - props.source._level;
+  return {
+    fontSize: 14 + x * 2
+  };
+};
+
 function TBodyTr(props) {
-  return /*#__PURE__*/_react["default"].createElement("tr", null, cells(props));
+  trStyle(props);
+  return /*#__PURE__*/_react["default"].createElement("tr", {
+    style: trStyle(props)
+  }, cells(props));
 }
 
 var _default = TBodyTr;

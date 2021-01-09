@@ -41,16 +41,26 @@ function WBSTable(props) {
       columns = _useState2[0],
       setColumns = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(false),
+  var _useState3 = (0, _react.useState)(true),
       _useState4 = _slicedToArray(_useState3, 2),
-      chooser_column = _useState4[0],
-      setChooserColumn = _useState4[1];
+      visible_wp = _useState4[0],
+      setVisibleWp = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      chooser_column = _useState6[0],
+      setChooserColumn = _useState6[1];
 
   var style = props.style || {};
   var callbacks = {
     chooser: {
       "switch": function _switch() {
         setChooserColumn(!chooser_column);
+      }
+    },
+    wp: {
+      visible: function visible(v) {
+        setVisibleWp(v);
       }
     },
     body: {
@@ -82,6 +92,7 @@ function WBSTable(props) {
   });
   return /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement(Comps.Controller, {
     open: chooser_column,
+    visible_wp: visible_wp,
     callbacks: callbacks
   }), chooser_column && /*#__PURE__*/_react["default"].createElement("div", {
     style: {
@@ -100,7 +111,8 @@ function WBSTable(props) {
     columns: columns_filterd,
     max_level: max_lev,
     records: records,
-    callbacks: callbacks
+    callbacks: callbacks,
+    visible_wp: visible_wp
   })));
 }
 

@@ -37,16 +37,25 @@ function Controller(props) {
   var style_right = _objectSpread({}, style.right);
 
   if (props.open) style_right.background = '#f3f3f3';
+  var callbacks = props.callbacks;
 
   var clickColumns = function clickColumns() {
-    props.callbacks.chooser["switch"]();
+    return callbacks.chooser["switch"]();
+  };
+
+  var clickSwidthVisibleWp = function clickSwidthVisibleWp() {
+    return callbacks.wp.visible(!props.visible_wp);
   };
 
   return /*#__PURE__*/_react["default"].createElement("div", {
     style: style.root
   }, /*#__PURE__*/_react["default"].createElement("div", {
     style: style.left
-  }), /*#__PURE__*/_react["default"].createElement("div", {
+  }, /*#__PURE__*/_react["default"].createElement("button", {
+    className: props.visible_wp ? "button is-warning" : "button",
+    title: "Workpackage \u306E\u8868\u793A/\u975E\u8868\u793A\u3092\u5207\u308A\u66FF\u3048\u308B",
+    onClick: clickSwidthVisibleWp
+  }, "Workpackage")), /*#__PURE__*/_react["default"].createElement("div", {
     style: style_right
   }, /*#__PURE__*/_react["default"].createElement("button", {
     className: "button",
