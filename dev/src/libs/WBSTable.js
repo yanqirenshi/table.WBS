@@ -71,7 +71,8 @@ function WBSTable (props) {
             <Comps.Controller open={chooser_column}
                               visible_wp={visible_wp}
                               filter_wp={filter_wp}
-                              callbacks={callbacks} />
+                              callbacks={callbacks}
+                              csv={core.makeCSV()}/>
 
             {chooser_column &&
              <div style={{marginBottom: 11}}>

@@ -7,17 +7,6 @@ import { faFilter, faDownload, faTimesCircle } from "@fortawesome/free-solid-svg
 import STYLE from './Style.js';
 const style = STYLE.controller;
 
-const headers = [
-  { label: "First Name", key: "firstname" },
-  { label: "Last Name", key: "lastname" },
-  { label: "Email", key: "email" }
-];
-const data = [
-  { firstname: "Ahmed", lastname: "Tomi", email: "ah@smthing.co.com" },
-  { firstname: "Raed", lastname: "Labes", email: "rl@smthing.co.com" },
-  { firstname: "Yezzi", lastname: "Min l3b", email: "ymin@cocococo.com" }
-];
-
 function Controller (props) {
     const style_right = {...style.center};
     if (props.open)
@@ -67,7 +56,8 @@ function Controller (props) {
 
           <div style={style.right}>
             <div style={{paddingTop: 10, paddingRight: 16}}>
-              <CSVLink data={data} headers={headers}>
+              <CSVLink data={props.csv.data}
+                       headers={props.csv.headers}>
                 <FontAwesomeIcon icon={faDownload} style={{fontSize: 22}}/>
               </CSVLink>
             </div>

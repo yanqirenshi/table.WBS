@@ -82,4 +82,21 @@ export default class Core {
 
         return false;
     }
+    /* **************************************************************** *
+     *  csv                                                             *
+     * **************************************************************** */
+    makeCSV () {
+        return {
+            headers: [
+                { label: "c1",  key: "firstname" },
+                { label: "c2",  key: "lastname" },
+                { label: "c3",  key: "email" }
+            ],
+            data: [
+                { firstname: "AAA", lastname: "BBB", email: "CCC" },
+                { firstname: "AAA", lastname: "BBB", email: "CCC" },
+                { firstname: "AAA", lastname: "BBB", email: "CCC" },
+            ],
+        };
+    }
 }
