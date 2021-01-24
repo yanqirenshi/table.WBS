@@ -4,9 +4,9 @@ import ButtonVisible from './ButtonVisible.js';
 
 const style = {
     root: {
-        padding: 22,
+        padding: 11,
         background: '#f3f3f3',
-        borderRadius: '8px 0px 8px 8px',
+        borderRadius: '8px',
     },
 };
 

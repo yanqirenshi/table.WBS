@@ -1,11 +1,32 @@
 import React from 'react';
-import { CSVLink } from "react-csv";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faDownload, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 import STYLE from './Style.js';
 const style = STYLE.controller;
+
+function exportToJson(objectData) {
+    let filename = "example.json";
+    let contentType = "application/json;charset=utf-8;";
+
+   if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+       const json = decodeURIComponent(encodeURI(JSON.stringify(objectData)));
+        var blob = new Blob([json], { type: contentType });
+        navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+        var a = document.createElement('a');
+        a.download = filename;
+        a.href = 'data:' + contentType + ',' + encodeURIComponent(JSON.stringify(objectData));
+        a.target = '_blank';
+
+        document.body.appendChild(a);
+
+        a.click();
+
+        document.body.removeChild(a);
+    }
+}
 
 function Controller (props) {
     const style_right = {...style.center};
@@ -16,9 +37,14 @@ function Controller (props) {
     const clickColumns = () => callbacks.chooser.switch();
     const clickSwidthVisibleWp = () => callbacks.wp.visible(!props.visible_wp);
     const changeFilter = (e) => callbacks.filter.change(e.target.value);
-    const clickClearWpFilter = () => {
-        console.log('xx');
-        callbacks.filter.clear();
+    const clickClearWpFilter = () => callbacks.filter.clear();
+
+    const xxx = () => {
+        exportToJson({
+            a: 1,
+            b: [ 2, 3 ],
+            c: { 4: 5, 6: 7 },
+        });
     };
 
     return (
@@ -55,12 +81,9 @@ function Controller (props) {
           </div>
 
           <div style={style.right}>
-            <div style={{paddingTop: 10, paddingRight: 16}}>
-              <CSVLink data={props.csv.data}
-                       headers={props.csv.headers}>
-                <FontAwesomeIcon icon={faDownload} style={{fontSize: 22}}/>
-              </CSVLink>
-            </div>
+            <button className="button" onClick={xxx}>
+              <FontAwesomeIcon icon={faDownload} style={{fontSize: 22}}/>
+            </button>
           </div>
         </div>
     );

@@ -32,4 +32,71 @@ export default class Core {
 
         return seeds.map((seed,i) => this.makeColumn(seed, i));
     }
+    /* **************************************************************** *
+     *  Visible                                                         *
+     * **************************************************************** */
+    changeColumnsVisible (number, v, columns) {
+        const new_columns = columns.map(d => Object.assign(d));
+
+        const col = new_columns.find(d => d.number===number);
+
+        col.visible = v;
+
+        return new_columns;
+    }
+    /* **************************************************************** *
+     *  contract                                                        *
+     * **************************************************************** */
+    contract (action, _id, closed_wbs) {
+        const tmp = {...closed_wbs};
+
+        if (action==='close') {
+            if (!tmp[_id])
+                tmp[_id] = true;
+        } else {
+            if (tmp[_id])
+                delete tmp[_id];
+        }
+
+        return tmp;
+    }
+    /* **************************************************************** *
+     *  filter                                                          *
+     * **************************************************************** */
+    filterWp (wbs, filter_wp) {
+        const core = wbs._core;
+        const word = filter_wp.toUpperCase();
+
+        for (const k in core) {
+            let v = core[k];
+            const type = typeof v;
+
+            if (type==='string' || type==='number')
+                v = ('' + v).toUpperCase();
+            else
+                continue;
+
+            if (v.indexOf(word)!==-1)
+                return true;
+        }
+
+        return false;
+    }
+    /* **************************************************************** *
+     *  csv                                                             *
+     * **************************************************************** */
+    makeCSV () {
+        return {
+            headers: [
+                { label: "c1",  key: "firstname" },
+                { label: "c2",  key: "lastname" },
+                { label: "c3",  key: "email" }
+            ],
+            data: [
+                { firstname: "AAA", lastname: "BBB", email: "CCC" },
+                { firstname: "AAA", lastname: "BBB", email: "CCC" },
+                { firstname: "AAA", lastname: "BBB", email: "CCC" },
+            ],
+        };
+    }
 }

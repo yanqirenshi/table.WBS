@@ -7,7 +7,8 @@ const makeTr = (d, props) => {
                     source={d}
                     columns={props.columns}
                     max_level={props.max_level}
-                    callbacks={props.callbacks} />;
+                    callbacks={props.callbacks}
+                    closed_wbs={props.closed_wbs} />;
 };
 
 const makeTrList = (props) => {

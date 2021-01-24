@@ -1,6 +1,10 @@
 import React from 'react';
 
-const makeLevelingSpace = (level) => {
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+
+function makeLevelingSpace (level) {
     const out = [];
 
     if (level>0)
@@ -10,14 +14,27 @@ const makeLevelingSpace = (level) => {
     return out;
 };
 
-const colSpan = (leveling, level, max_lev) => {
+function colSpan (leveling, level, max_lev) {
     if (!leveling)
         return 1;
 
     return (max_lev + 1) - level;
 };
 
-const cells = (props) => {
+function opener (row, column, closed_wbs, callback) {
+    if (row._class==="WORKPACKAGE" || !column.leveling)
+        return '';
+
+    const x = closed_wbs[row._id];
+    return (
+        <span onClick={callback} action={x ? "open" : "close"} data_id={row._id}>
+          {x  && <FontAwesomeIcon style={{marginRight:8}} icon={faCaretRight} />}
+          {!x && <FontAwesomeIcon style={{marginRight:8}} icon={faCaretDown} />}
+        </span>
+    );
+}
+
+function cells (props, clickOpner) {
     const out = [];
 
     const row = props.source;
@@ -33,7 +50,7 @@ const cells = (props) => {
         cell_s: {
             borderLeft: 'none',
             borderRight: 'none',
-            width: 22,
+            width: 33,
         },
         cell_s_first: {
             borderRight: 'none',
@@ -48,15 +65,16 @@ const cells = (props) => {
     for (const column of columns) {
         const leveling = column.leveling;
         const level = leveling ? row._level : 0;
-        const number = column.number;
 
-        makeLevelingSpace(level).map((d,j) => {
+        let j = 0;
+        for (const d of makeLevelingSpace(level)) {
             out.push(
-                <td key={key++}
+                <td key={row + (j++)}
                     style={leveling && j===0 ? style.cell_s_first : style.cell_s}>
+                  {d}
                 </td>
             );
-        });
+        }
 
         out.push(
             <td key={key++}
@@ -64,6 +82,7 @@ const cells = (props) => {
                 colSpan={colSpan(column.leveling, level, max_level)}
                 callbacks={callbacks}
                 nowrap={column.nowrap ? 'true' : null}>
+              {opener(row, column, props.closed_wbs, clickOpner)}
               {column.contents(column, row, key)}
             </td>
         );
@@ -72,7 +91,7 @@ const cells = (props) => {
     return out;
 };
 
-const trStyle = (props) => {
+function trStyle (props) {
     if (props.source._class==="WORKPACKAGE")
         return  { fontWeight: 'bold' };
 
@@ -81,12 +100,28 @@ const trStyle = (props) => {
     return {fontSize: 14 + x * 2};
 }
 
+
 function TBodyTr (props) {
     trStyle(props);
 
+    const clickOpner = (e) => {
+        const span = (element) => {
+            if (element.tagName==='SPAN')
+                return element;
+            return span(element.parentNode);
+        };
+
+        const element = span(e.target);
+
+        const action =element.getAttribute('action');
+        const data_id =element.getAttribute('data_id') * 1;
+
+        props.callbacks.body.wbs.switch(action, data_id);
+    };
+
     return (
         <tr style={trStyle(props)}>
-          {cells(props)}
+          {cells(props, clickOpner)}
         </tr>
     );
 }

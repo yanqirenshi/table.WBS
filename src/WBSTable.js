@@ -1,48 +1,39 @@
 import React, { useState } from 'react';
 
 import Asshole from '@yanqirenshi/wnqi.big.size';
-import {Core} from './index.js';
-
+import Core from './Core.js';
 import * as Comps from './Components.js';
 
-const ASSHOLE = new Asshole();
-
 function WBSTable (props) {
-    const [columns, setColumns] = useState(new Core().makeColumns(props.columns));
+    const [core] = useState(new Core());
+    const [colon] = useState(new Asshole());
+
+    const [columns, setColumns] = useState(core.makeColumns(props.columns));
     const [visible_wp, setVisibleWp] = useState(true);
     const [chooser_column, setChooserColumn] = useState(false);
+    const [closed_wbs, setClosedWbs] = useState({});
+    const [filter_wp, setFilterWp] = useState('');
 
     const style = props.style || {};
 
     const callbacks = {
-        chooser: {
-            switch: () => {
-                setChooserColumn(!chooser_column);
-            },
-        },
-        wp: {
-            visible: (v) => {
-                setVisibleWp(v);
-            }
-        },
+        chooser: { switch: () => setChooserColumn(!chooser_column), },
+        wp: { visible: (v) => setVisibleWp(v), },
         body: {
             row: {
-                visible: (number, v) => {
-                    const new_columns = columns.map(d => Object.assign(d));
-
-                    const col = new_columns.find(d => d.number===number);
-
-                    col.visible = v;
-
-                    setColumns(new_columns);
-                }
+                visible: (number, v) => setColumns(core.changeColumnsVisible (number, v, columns)),
+            },
+            wbs: {
+                switch: (action, _id) => setClosedWbs(core.contract(action, _id, closed_wbs)),
             },
         },
+        filter: {
+            change: (v) => setFilterWp(v),
+        }
     };
 
-
-    const records = ASSHOLE.build({
-        data: props.source,
+    const records = colon.build({
+        data: props.source, // array
         options: props.options,
         start_id: props.start_id,
         flatten: true,
@@ -53,12 +44,35 @@ function WBSTable (props) {
     }, 0);
 
     const columns_filterd = columns.filter(d => d.visible);
+
+    const records_filterd = [];
+    let lev = null;
+    for (const rec of records) {
+        if (rec._class==="WORKPACKAGE" && !core.filterWp(rec, filter_wp))
+            continue;
+
+        if (closed_wbs[rec._id]) {
+            lev = rec._level;
+            records_filterd.push(rec);
+            continue;
+        }
+
+        if (lev!==null && rec._level > lev)
+            continue;
+
+        lev = null;
+
+        records_filterd.push(rec);
+    }
+
     return (
         <div>
           <div>
             <Comps.Controller open={chooser_column}
                               visible_wp={visible_wp}
-                              callbacks={callbacks} />
+                              filter_wp={filter_wp}
+                              callbacks={callbacks}
+                              csv={core.makeCSV()}/>
 
             {chooser_column &&
              <div style={{marginBottom: 11}}>
@@ -75,9 +89,11 @@ function WBSTable (props) {
 
             <Comps.TBody columns={columns_filterd}
                          max_level={max_lev}
-                         records={records}
+                         records={records_filterd}
                          callbacks={callbacks}
-                         visible_wp={visible_wp} />
+                         visible_wp={visible_wp}
+                         closed_wbs={closed_wbs}
+                         filter_wp={filter_wp} />
           </table>
         </div>
     );
