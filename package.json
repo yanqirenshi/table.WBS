@@ -1,8 +1,8 @@
 {
     "name": "@yanqirenshi/table.wbs",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "description": "See: examples/",
-    "main": "index.js",
+    "main": "dist/index.js",
     "directories": {
         "doc": "docs",
         "example": "example",
