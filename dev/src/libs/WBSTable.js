@@ -81,7 +81,7 @@ function WBSTable (props) {
              </div>}
           </div>
 
-          <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+          <table className="table is-fullwidth is-striped is-narrow is-hoverable"
                  style={style}>
 
             <Comps.THead columns={columns_filterd}

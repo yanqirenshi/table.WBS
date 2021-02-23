@@ -1,8 +1,13 @@
 {
     "name": "@yanqirenshi/table.wbs",
-    "version": "0.0.10",
-    "description": "",
-    "main": "dist/index.js",
+    "version": "0.0.11",
+    "description": "See: examples/",
+    "main": "index.js",
+    "directories": {
+        "doc": "docs",
+        "example": "example",
+        "test": "tests"
+    },
     "scripts": {
         "test": "jest",
         "test:w": "jest --watch",
@@ -10,36 +15,37 @@
         "transpile": "babel src -d dist --copy-files",
         "prepublishOnly": "npm run transpile"
     },
-    "peerDependencies": {
-        "react": "^17.0.1",
-        "react-dom": "^17.0.1"
-    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/yanqirenshi/table.WBS.git"
     },
-    "author": "yanqirenshi <yanqirenshi@gmail.com> (https://github.com/yanqirenshi)",
-    "license": "ISC",
+    "author": "yanqirenshi@gmail.com",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/yanqirenshi/table.WBS/issues"
     },
-    "homepage": "https://yanqirenshi.github.io/table.WBS",
+    "homepage": "https://github.com/yanqirenshi/table.WBS#readme",
+    "peerDependencies": {
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1"
+    },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^1.2.32",
         "@fortawesome/free-solid-svg-icons": "^5.15.1",
         "@fortawesome/react-fontawesome": "^0.1.13",
         "@yanqirenshi/wnqi.big.size": "0.0.2",
         "bulma": "^0.9.1",
-        "deepmerge": "^4.2.2",
-        "react": "^17.0.1"
+        "deepmerge": "^4.2.2"
     },
     "devDependencies": {
-        "@babel/cli": "^7.12.10",
-        "@babel/core": "^7.12.10",
-        "@babel/preset-env": "^7.12.11",
-        "@babel/preset-react": "^7.12.10",
-        "babel-jest": "^25.2.4",
+        "@babel/cli": "^7.13.0",
+        "@babel/core": "^7.13.1",
+        "@babel/preset-env": "^7.13.0",
+        "@babel/preset-react": "^7.12.13",
         "babel-loader": "^8.2.2",
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1",
+        "babel-jest": "^25.2.4",
         "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
         "jest": "^25.2.4"
     }

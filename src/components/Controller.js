@@ -50,16 +50,16 @@ function Controller (props) {
     return (
         <div style={style.root}>
           <div style={style.left}>
-            <button className={props.visible_wp ? "button is-warning" : "button"}
+            <button className={props.visible_wp ? "button is-warning is-small" : "button is-small"}
                     title="Workpackage の表示/非表示を切り替える"
                     onClick={clickSwidthVisibleWp}>
               Wp
             </button>
 
-            <div style={{marginLeft:22, width: '100%'}}>
+            <div style={{marginLeft:11, width: '100%'}}>
               <div className="field">
                 <div className="control has-icons-left has-icons-right">
-                  <input className="input"
+                  <input className="input is-small"
                          type="text"
                          placeholder="Filter Workpackage"
                          onKeyUp={changeFilter}
@@ -74,15 +74,16 @@ function Controller (props) {
           </div>
 
           <div style={style_right}>
-            <button className="button"
+            <button className="button is-small"
                     onClick={clickColumns}>
               Columns
             </button>
           </div>
 
           <div style={style.right}>
-            <button className="button" onClick={xxx}>
-              <FontAwesomeIcon icon={faDownload} style={{fontSize: 22}}/>
+            <button className="button is-small"
+                    onClick={xxx}>
+              <FontAwesomeIcon icon={faDownload} style={{fontSize: 14}}/>
             </button>
           </div>
         </div>

@@ -10,7 +10,6 @@ const controller = {
     },
     center: {
         display:'flex',
-        marginLeft: 11,
         padding:11,
         borderRadius: '8px 8px 0px 0px',
     },
@@ -18,7 +17,6 @@ const controller = {
         display:'flex',
         paddingTop: 11,
         marginBottom: 8,
-        marginLeft: 11,
     },
 };
 
