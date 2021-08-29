@@ -3,12 +3,14 @@ import React from 'react';
 import TBodyTr from './TBodyTr.js';
 
 const makeTr = (d, props) => {
-    return <TBodyTr key={d._id}
-                    source={d}
-                    columns={props.columns}
-                    max_level={props.max_level}
-                    callbacks={props.callbacks}
-                    closed_wbs={props.closed_wbs} />;
+    return (
+        <TBodyTr key={d._id}
+                 source={d}
+                 columns={props.columns}
+                 max_level={props.max_level}
+                 callbacks={props.callbacks}
+                 closed_wbs={props.closed_wbs} />
+    );
 };
 
 const makeTrList = (props) => {
@@ -35,8 +37,10 @@ const makeTrList = (props) => {
 };
 
 function TBody (props) {
+    const style = props.style || {}; //{background:'#fcc800'};
+
     return (
-        <tbody>
+        <tbody style={style}>
           {makeTrList(props)}
         </tbody>
     );

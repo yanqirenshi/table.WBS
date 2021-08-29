@@ -10,13 +10,15 @@ const colSpan = (leveling, max_level) => {
 function THead (props) {
     const max_level = props.max_level;
 
+    const style = props.style || {}; //{background:'#fcc800'};
+
     return (
         <thead>
           <tr>
             {props.columns.map((d, i)=> {
                 return <th key={i}
                            colSpan={colSpan(d.leveling, max_level)}
-                           style={{background:'#fcc800'}}>
+                           style={style}>
                          {d.label}
                        </th>;
             })}
