@@ -29,7 +29,11 @@ function WBSTable (props) {
         },
         filter: {
             change: (v) => setFilterWp(v),
-        }
+        },
+        download: () => {
+            if (props.download)
+                props.download();
+        },
     };
 
     const records = colon.build({
@@ -85,7 +89,8 @@ function WBSTable (props) {
                  style={style}>
 
             <Comps.THead columns={columns_filterd}
-                         max_level={max_lev} />
+                         max_level={max_lev}
+                         style={style.head}/>
 
             <Comps.TBody columns={columns_filterd}
                          max_level={max_lev}
@@ -93,7 +98,8 @@ function WBSTable (props) {
                          callbacks={callbacks}
                          visible_wp={visible_wp}
                          closed_wbs={closed_wbs}
-                         filter_wp={filter_wp} />
+                         filter_wp={filter_wp}
+                         style={style.body} />
           </table>
         </div>
     );

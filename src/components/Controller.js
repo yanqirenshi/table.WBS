@@ -6,28 +6,6 @@ import { faFilter, faDownload, faTimesCircle } from "@fortawesome/free-solid-svg
 import STYLE from './Style.js';
 const style = STYLE.controller;
 
-function exportToJson(objectData) {
-    let filename = "example.json";
-    let contentType = "application/json;charset=utf-8;";
-
-   if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-       const json = decodeURIComponent(encodeURI(JSON.stringify(objectData)));
-        var blob = new Blob([json], { type: contentType });
-        navigator.msSaveOrOpenBlob(blob, filename);
-    } else {
-        var a = document.createElement('a');
-        a.download = filename;
-        a.href = 'data:' + contentType + ',' + encodeURIComponent(JSON.stringify(objectData));
-        a.target = '_blank';
-
-        document.body.appendChild(a);
-
-        a.click();
-
-        document.body.removeChild(a);
-    }
-}
-
 function Controller (props) {
     const style_right = {...style.center};
     if (props.open)
@@ -39,18 +17,13 @@ function Controller (props) {
     const changeFilter = (e) => callbacks.filter.change(e.target.value);
     const clickClearWpFilter = () => callbacks.filter.clear();
 
-    const xxx = () => {
-        exportToJson({
-            a: 1,
-            b: [ 2, 3 ],
-            c: { 4: 5, 6: 7 },
-        });
-    };
+    const xxx = () => callbacks.download();
 
     return (
         <div style={style.root}>
           <div style={style.left}>
-            <button className={props.visible_wp ? "button is-warning is-small" : "button is-small"}
+            <button className="button is-small"
+                    style={props.visible_wp ? {fontWeight:'bold'} : null}
                     title="Workpackage の表示/非表示を切り替える"
                     onClick={clickSwidthVisibleWp}>
               Wp

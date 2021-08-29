@@ -27,9 +27,12 @@ function opener (row, column, closed_wbs, callback) {
 
     const x = closed_wbs[row._id];
     return (
-        <span onClick={callback} action={x ? "open" : "close"} data_id={row._id}>
-          {x  && <FontAwesomeIcon style={{marginRight:8}} icon={faCaretRight} />}
-          {!x && <FontAwesomeIcon style={{marginRight:8}} icon={faCaretDown} />}
+        <span style={{width: 22, display:'inline-block'}}
+              onClick={callback}
+              action={x ? "open" : "close"}
+              data_id={row._id}>
+          {x  && <FontAwesomeIcon style={{color: '#888084'}} icon={faCaretRight} />}
+          {!x && <FontAwesomeIcon style={{color: '#dddcd6'}} icon={faCaretDown} />}
         </span>
     );
 }
@@ -93,7 +96,7 @@ function cells (props, clickOpner) {
 
 function trStyle (props) {
     if (props.source._class==="WORKPACKAGE")
-        return  { fontWeight: 'bold' };
+        return  {}; // return  { fontWeight: 'bold' };
 
     const x = props.max_level + 1 - props.source._level;
 
