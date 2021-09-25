@@ -82,6 +82,31 @@ export default class Core {
 
         return false;
     }
+    applyFilter (filter_wp, closed_wbs, records) {
+        const out = [];
+
+        let lev = null;
+
+        for (const rec of records) {
+            if (rec._class==="WORKPACKAGE" && !this.filterWp(rec, filter_wp))
+                continue;
+
+            if (closed_wbs[rec._id]) {
+                lev = rec._level;
+                out.push(rec);
+                continue;
+            }
+
+            if (lev!==null && rec._level > lev)
+                continue;
+
+            lev = null;
+
+            out.push(rec);
+        }
+
+        return out;
+    }
     /* **************************************************************** *
      *  csv                                                             *
      * **************************************************************** */
@@ -98,5 +123,13 @@ export default class Core {
                 { firstname: "AAA", lastname: "BBB", email: "CCC" },
             ],
         };
+    }
+    /* **************************************************************** *
+     *  utils                                                           *
+     * **************************************************************** */
+    maxLev (records) {
+        return records.reduce((lev, d) => {
+            return d._level > lev ? d._level : lev;
+        }, 0);
     }
 }

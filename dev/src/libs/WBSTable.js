@@ -1,20 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Asshole from '@yanqirenshi/wnqi.big.size';
 import Core from './Core.js';
 import * as Comps from './Components.js';
 
-function WBSTable (props) {
-    const [core] = useState(new Core());
-    const [colon] = useState(new Asshole());
+const core = new Core();
+const colon = new Asshole();
 
+function WBSTable (props) {
     const [columns, setColumns] = useState(core.makeColumns(props.columns));
+    const [records, setRecords] = useState([]);
     const [visible_wp, setVisibleWp] = useState(true);
     const [chooser_column, setChooserColumn] = useState(false);
     const [closed_wbs, setClosedWbs] = useState({});
     const [filter_wp, setFilterWp] = useState('');
 
+    const data = props.source;
+    const options = props.options;
+    const start_id = props.start_id;
+    const download = props.download;
     const style = props.style || {};
+
+    useEffect(() => {
+        (async () => {
+            setRecords(colon.build({
+                data:     data,
+                options:  options,
+                start_id: start_id,
+                flatten:  true,
+            }));
+        })();
+    }, [filter_wp, closed_wbs]);
+
+    const max_lev = core.maxLev(records);
+    const columns_filterd = columns.filter(d => d.visible);
+    const records_filterd = core.applyFilter(filter_wp, closed_wbs, records);
 
     const callbacks = {
         chooser: { switch: () => setChooserColumn(!chooser_column), },
@@ -30,44 +50,8 @@ function WBSTable (props) {
         filter: {
             change: (v) => setFilterWp(v),
         },
-        download: () => {
-            if (props.download)
-                props.download();
-        },
+        download: () => { if (download) download(); },
     };
-
-    const records = colon.build({
-        data: props.source, // array
-        options: props.options,
-        start_id: props.start_id,
-        flatten: true,
-    });
-
-    const max_lev = records.reduce((lev, d) => {
-        return d._level > lev ? d._level : lev;
-    }, 0);
-
-    const columns_filterd = columns.filter(d => d.visible);
-
-    const records_filterd = [];
-    let lev = null;
-    for (const rec of records) {
-        if (rec._class==="WORKPACKAGE" && !core.filterWp(rec, filter_wp))
-            continue;
-
-        if (closed_wbs[rec._id]) {
-            lev = rec._level;
-            records_filterd.push(rec);
-            continue;
-        }
-
-        if (lev!==null && rec._level > lev)
-            continue;
-
-        lev = null;
-
-        records_filterd.push(rec);
-    }
 
     return (
         <div>
