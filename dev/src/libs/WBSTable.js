@@ -14,6 +14,7 @@ function WBSTable (props) {
     const [chooser_column, setChooserColumn] = useState(false);
     const [closed_wbs, setClosedWbs] = useState({});
     const [filter_wp, setFilterWp] = useState('');
+    const [bilding, setBilding] = useState(false);
 
     const data = props.source;
     const options = props.options;
@@ -23,12 +24,14 @@ function WBSTable (props) {
 
     useEffect(() => {
         (async () => {
+            setBilding(true);
             setRecords(colon.build({
                 data:     data,
                 options:  options,
                 start_id: start_id,
                 flatten:  true,
             }));
+            setBilding(false);
         })();
     }, [filter_wp, closed_wbs]);
 
@@ -53,6 +56,14 @@ function WBSTable (props) {
         download: () => { if (download) download(); },
     };
 
+    const style_loading = {
+        width: '100%',
+        height: 333,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    };
+
     return (
         <div>
           <div>
@@ -69,22 +80,30 @@ function WBSTable (props) {
              </div>}
           </div>
 
-          <table className="table is-fullwidth is-striped is-narrow is-hoverable"
-                 style={style}>
+          {bilding &&
+           <div style={style_loading}>
+             <p style={{fontSize: 33, color: '#888'}}>
+               Waiting for ........
+             </p>
+           </div>}
 
-            <Comps.THead columns={columns_filterd}
-                         max_level={max_lev}
-                         style={style.head}/>
+          {!bilding &&
+           <table className="table is-fullwidth is-striped is-narrow is-hoverable"
+                  style={style}>
 
-            <Comps.TBody columns={columns_filterd}
-                         max_level={max_lev}
-                         records={records_filterd}
-                         callbacks={callbacks}
-                         visible_wp={visible_wp}
-                         closed_wbs={closed_wbs}
-                         filter_wp={filter_wp}
-                         style={style.body} />
-          </table>
+             <Comps.THead columns={columns_filterd}
+                          max_level={max_lev}
+                          style={style.head}/>
+
+             <Comps.TBody columns={columns_filterd}
+                          max_level={max_lev}
+                          records={records_filterd}
+                          callbacks={callbacks}
+                          visible_wp={visible_wp}
+                          closed_wbs={closed_wbs}
+                          filter_wp={filter_wp}
+                          style={style.body} />
+           </table>}
         </div>
     );
 }
