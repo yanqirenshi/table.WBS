@@ -29,7 +29,7 @@ function opener (row, column, closed_wbs, callback) {
     return (
         <span style={{width: 22, display:'inline-block'}}
               onClick={callback}
-              action={x ? "open" : "close"}
+              data-action={x ? "open" : "close"}
               data_id={row._id}>
           {x  && <FontAwesomeIcon style={{color: '#888084'}} icon={faCaretRight} className="" />}
           {!x && <FontAwesomeIcon style={{color: '#dddcd6'}} icon={faCaretDown} className="" />}
@@ -116,7 +116,7 @@ function TBodyTr (props) {
 
         const element = span(e.target);
 
-        const action =element.getAttribute('action');
+        const action =element.getAttribute('data-action');
         const data_id =element.getAttribute('data_id') * 1;
 
         props.callbacks.body.wbs.switch(action, data_id);
