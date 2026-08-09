@@ -31,8 +31,8 @@ function opener (row, column, closed_wbs, callback) {
               onClick={callback}
               action={x ? "open" : "close"}
               data_id={row._id}>
-          {x  && <FontAwesomeIcon style={{color: '#888084'}} icon={faCaretRight} />}
-          {!x && <FontAwesomeIcon style={{color: '#dddcd6'}} icon={faCaretDown} />}
+          {x  && <FontAwesomeIcon style={{color: '#888084'}} icon={faCaretRight} className="" />}
+          {!x && <FontAwesomeIcon style={{color: '#dddcd6'}} icon={faCaretDown} className="" />}
         </span>
     );
 }

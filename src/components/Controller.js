@@ -39,7 +39,7 @@ function Controller (props) {
                          defaultValue={props.filter_wp} />
 
                   <span className="icon is-small is-left">
-                    <FontAwesomeIcon icon={faFilter} />
+                    <FontAwesomeIcon icon={faFilter} className="" />
                   </span>
                 </div>
               </div>
@@ -56,7 +56,7 @@ function Controller (props) {
           <div style={style.right}>
             <button className="button is-small"
                     onClick={xxx}>
-              <FontAwesomeIcon icon={faDownload} style={{fontSize: 14}}/>
+              <FontAwesomeIcon icon={faDownload} className="" style={{fontSize: 14}}/>
             </button>
           </div>
         </div>
