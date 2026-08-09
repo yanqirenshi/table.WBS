@@ -1,10 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faDownload, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 import STYLE from './Style.js';
 const style = STYLE.controller;
+
+function DownloadButton (props) {
+    const download = props.download;
+    const [open, setOpen] = useState(false);
+    const root = useRef(null);
+
+    useEffect(() => {
+        if (!open)
+            return;
+
+        const closeIfOutside = (e) => {
+            if (root.current && !root.current.contains(e.target))
+                setOpen(false);
+        };
+
+        document.addEventListener('mousedown', closeIfOutside);
+
+        return () => document.removeEventListener('mousedown', closeIfOutside);
+    }, [open]);
+
+    if (typeof download === 'function') {
+        return (
+            <button className="button is-small" onClick={download}>
+              <FontAwesomeIcon icon={faDownload} className="" style={{fontSize: 14}}/>
+            </button>
+        );
+    }
+
+    const select = (fn) => {
+        fn();
+        setOpen(false);
+    };
+
+    return (
+        <div className={"dropdown is-right" + (open ? " is-active" : "")} ref={root}>
+          <div className="dropdown-trigger">
+            <button className="button is-small" onClick={() => setOpen(!open)}>
+              <FontAwesomeIcon icon={faDownload} className="" style={{fontSize: 14}}/>
+            </button>
+          </div>
+          <div className="dropdown-menu" role="menu">
+            <div className="dropdown-content">
+              <a className="dropdown-item" onClick={() => select(download.hierarchy)}>階層</a>
+              <a className="dropdown-item" onClick={() => select(download.flat)}>フラット</a>
+              <a className="dropdown-item" onClick={() => select(download.data)}>データ</a>
+            </div>
+          </div>
+        </div>
+    );
+}
 
 function Controller (props) {
     const style_right = {...style.center};
@@ -16,8 +66,6 @@ function Controller (props) {
     const clickSwidthVisibleWp = () => callbacks.wp.visible(!props.visible_wp);
     const changeFilter = (e) => callbacks.filter.change(e.target.value);
     const clickClearWpFilter = () => callbacks.filter.clear();
-
-    const xxx = () => callbacks.download();
 
     return (
         <div style={style.root}>
@@ -54,10 +102,7 @@ function Controller (props) {
           </div>
 
           <div style={style.right}>
-            <button className="button is-small"
-                    onClick={xxx}>
-              <FontAwesomeIcon icon={faDownload} className="" style={{fontSize: 14}}/>
-            </button>
+            <DownloadButton download={callbacks.download} />
           </div>
         </div>
     );

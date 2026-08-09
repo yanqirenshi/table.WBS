@@ -7,6 +7,23 @@ import * as Comps from './Components.js';
 const core = new Core();
 const colon = new Asshole();
 
+const BOM = '﻿';
+
+function downloadCSV (filename, csv) {
+    const blob = new Blob([BOM + csv], {type: 'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+
+    a.href = url;
+    a.download = filename;
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+}
+
 function WBSTable (props) {
     const [columns, setColumns] = useState(core.makeColumns(props.columns));
     const [records, setRecords] = useState([]);
@@ -53,7 +70,13 @@ function WBSTable (props) {
         filter: {
             change: (v) => setFilterWp(v),
         },
-        download: () => { if (download) download(); },
+        download: download
+            ? (() => download())
+            : {
+                hierarchy: () => downloadCSV('wbs-hierarchy.csv', core.makeCSVHierarchy(columns_filterd, records)),
+                flat:      () => downloadCSV('wbs-flat.csv',      core.makeCSVFlat(columns_filterd, records)),
+                data:      () => downloadCSV('wbs-data.csv',      core.makeCSVData(records)),
+              },
     };
 
     const style_loading = {
@@ -70,8 +93,7 @@ function WBSTable (props) {
             <Comps.Controller open={chooser_column}
                               visible_wp={visible_wp}
                               filter_wp={filter_wp}
-                              callbacks={callbacks}
-                              csv={core.makeCSV()}/>
+                              callbacks={callbacks}/>
 
             {chooser_column &&
              <div style={{marginBottom: 11}}>

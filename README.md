@@ -101,3 +101,28 @@ export const EDGES = [
     },
 ];
 ```
+
+### (3) CSV Download
+
+The download button in the controller offers three CSV export types out of the box: 階層 (hierarchy, indented by WBS level), フラット (flat), and データ (raw computed records, all fields).
+
+Each column can define a `value(d)` function to control what plain text goes into the 階層/フラット CSV cell (`contents` is JSX and isn't used for CSV). Columns without `value` fall back to `d[column.key]`, then `d._id`.
+
+```
+{
+    label: 'Name',
+    required: true,
+    value: (d) => d.label,
+    contents: (c, d) => {
+        return <span>{d.label}</span>;
+    },
+},
+```
+
+To keep the previous behavior of delegating the click to your own handler instead of the built-in dropdown, pass a `download` prop to `<WBSTable>`:
+
+```
+<WBSTable source={wbs_source}
+          columns={columns}
+          download={() => myOwnExport()}/>
+```

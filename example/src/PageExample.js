@@ -10,6 +10,7 @@ function PageExample() {
             label: 'Code',
             leveling: true,
             required: true,
+            value: (d) => d._id,
             contents: (c, d) => {
                 return <>{d._id}</>;
             }
@@ -17,6 +18,7 @@ function PageExample() {
         {
             label: 'Name',
             required: true,
+            value: (d) => d.label,
             contents: (c, d) => {
                 return <>
                <span>{d.label}</span>
@@ -25,6 +27,7 @@ function PageExample() {
         },
         {
             label: 'Description',
+            value: (d) => d.description,
             contents: (c, d) => {
                 return d.description;
             }

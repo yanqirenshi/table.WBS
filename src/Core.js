@@ -110,19 +110,72 @@ export default class Core {
     /* **************************************************************** *
      *  csv                                                             *
      * **************************************************************** */
-    makeCSV () {
-        return {
-            headers: [
-                { label: "c1",  key: "firstname" },
-                { label: "c2",  key: "lastname" },
-                { label: "c3",  key: "email" }
-            ],
-            data: [
-                { firstname: "AAA", lastname: "BBB", email: "CCC" },
-                { firstname: "AAA", lastname: "BBB", email: "CCC" },
-                { firstname: "AAA", lastname: "BBB", email: "CCC" },
-            ],
-        };
+    escapeCSVField (v) {
+        const s = (v===null || v===undefined) ? '' : String(v);
+
+        if (/[",\r\n]/.test(s))
+            return '"' + s.replace(/"/g, '""') + '"';
+
+        return s;
+    }
+    toCSVString (headers, rows) {
+        return [headers, ...rows]
+            .map(row => row.map(v => this.escapeCSVField(v)).join(','))
+            .join('\r\n');
+    }
+    columnValue (column, record) {
+        if (typeof column.value === 'function')
+            return column.value(record);
+
+        if (column.key!==undefined && record[column.key]!==undefined)
+            return record[column.key];
+
+        return record._id;
+    }
+    makeCSVFlat (columns, records) {
+        const headers = columns.map(c => c.label);
+        const rows = records.map(r => columns.map(c => this.columnValue(c, r)));
+
+        return this.toCSVString(headers, rows);
+    }
+    makeCSVHierarchy (columns, records) {
+        const headers = columns.map(c => c.label);
+        const rows = records.map(r => columns.map(c => {
+            const v = this.columnValue(c, r);
+
+            return c.leveling ? (this.margin(r._level) + v) : v;
+        }));
+
+        return this.toCSVString(headers, rows);
+    }
+    jsonStringifySafe (v) {
+        const seen = new WeakSet();
+
+        return JSON.stringify(v, (key, val) => {
+            if (val!==null && typeof val==='object') {
+                if (seen.has(val))
+                    return '[Circular]';
+
+                seen.add(val);
+            }
+
+            return val;
+        });
+    }
+    makeCSVData (records) {
+        const keys = records.reduce((set, r) => {
+            Object.keys(r).forEach(k => set.add(k));
+
+            return set;
+        }, new Set());
+        const headers = Array.from(keys);
+        const rows = records.map(r => headers.map(k => {
+            const v = r[k];
+
+            return (v!==null && typeof v==='object') ? this.jsonStringifySafe(v) : v;
+        }));
+
+        return this.toCSVString(headers, rows);
     }
     /* **************************************************************** *
      *  utils                                                           *
