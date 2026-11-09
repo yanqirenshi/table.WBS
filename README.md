@@ -169,7 +169,11 @@ const columns = [
 
 ### (5) Row selection
 
-Pass `selection` to make rows clickable. Selected rows get Bulma's `is-selected` class.
+Pass `selection` to make rows clickable. Selected rows get a `wbs-selected` class and a `#F2F2B0` background (text color is left as is). Override the background with `style.selected`:
+
+```
+const style_table = { selected: { backgroundColor: '#ffe' } };
+```
 
 ```
 <WBSTable source={wbs_source}

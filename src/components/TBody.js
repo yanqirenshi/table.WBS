@@ -10,7 +10,8 @@ const makeTr = (d, props) => {
                  max_level={props.max_level}
                  callbacks={props.callbacks}
                  closed_wbs={props.closed_wbs}
-                 selected={props.selected && props.selected[d._id] ? true : false} />
+                 selected={props.selected && props.selected[d._id] ? true : false}
+                 style_selected={props.style_selected} />
     );
 };
 

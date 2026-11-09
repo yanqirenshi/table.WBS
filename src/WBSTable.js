@@ -146,6 +146,7 @@ function WBSTable (props) {
                           visible_wp={visible_wp}
                           closed_wbs={closed_wbs}
                           selected={selected}
+                          style_selected={style.selected}
                           filter_wp={filter_wp}
                           style={style.body} />
            </table>}

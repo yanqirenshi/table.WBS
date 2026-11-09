@@ -94,8 +94,15 @@ function cells (props, clickOpner) {
     return out;
 };
 
+// 選択行の既定スタイル。文字色は変えず背景だけ変える。
+// WBSTable の style.selected で上書きできる。
+const SELECTED_STYLE = { backgroundColor: '#F2F2B0' };
+
 function trStyle (props, selectable) {
-    const style = selectable ? { cursor: 'pointer' } : {};
+    let style = selectable ? { cursor: 'pointer' } : {};
+
+    if (props.selected)
+        style = {...style, ...SELECTED_STYLE, ...(props.style_selected || {})};
 
     if (props.source._class==="WORKPACKAGE")
         return  style; // return  { fontWeight: 'bold' };
@@ -131,7 +138,7 @@ function TBodyTr (props) {
 
     return (
         <tr style={trStyle(props, !!select)}
-            className={props.selected ? 'is-selected' : null}
+            className={props.selected ? 'wbs-selected' : null}
             onClick={clickRow}>
           {cells(props, clickOpner)}
         </tr>
