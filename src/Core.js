@@ -158,14 +158,15 @@ export default class Core {
             if (rec._class==="WORKPACKAGE" && !this.filterWp(rec, filter_wp))
                 continue;
 
+            // 閉じた祖先の配下にいる行は、その行自身が閉じていても表示しない。
+            if (lev!==null && rec._level > lev)
+                continue;
+
             if (closed_wbs[rec._id]) {
                 lev = rec._level;
                 out.push(rec);
                 continue;
             }
-
-            if (lev!==null && rec._level > lev)
-                continue;
 
             lev = null;
 
