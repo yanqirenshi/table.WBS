@@ -5,7 +5,14 @@ import WBSTable from '@yanqirenshi/table.wbs';
 import * as WBS_DATA from './data.js';
 
 function PageExample() {
+    // 選択モード。'single' か 'multiple'。切り替えたら選択はクリアする。
+    const [mode, setMode] = useState('single');
     const [selected, setSelected] = useState([]);
+
+    const changeMode = (m) => {
+        setMode(m);
+        setSelected([]);
+    };
 
     const columns = [
         {
@@ -47,11 +54,32 @@ function PageExample() {
     const style_table = { fontSize: '16px' }; // or null
     return (
         <div style={{padding: '33px'}}>
+          <div className="control" style={{marginBottom: 11}}>
+            <strong style={{marginRight: 11}}>Selection:</strong>
+            <label className="radio">
+              <input type="radio"
+                     name="selection-mode"
+                     value="single"
+                     checked={mode==='single'}
+                     onChange={() => changeMode('single')}/>
+              {' '}単一選択
+            </label>
+            <label className="radio">
+              <input type="radio"
+                     name="selection-mode"
+                     value="multiple"
+                     checked={mode==='multiple'}
+                     onChange={() => changeMode('multiple')}/>
+              {' '}複数選択
+            </label>
+          </div>
+
           <WBSTable source={wbs_source}
                     columns={columns}
                     options={options}
                     style={style_table}
-                    selection="multiple"
+                    selection={mode}
+                    selected={selected.map(d => d._id)}
                     onSelect={(records) => setSelected(records)}/>
 
           <div style={{marginTop: 22}} data-testid="selected">
