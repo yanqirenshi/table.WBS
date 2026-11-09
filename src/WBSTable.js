@@ -32,12 +32,21 @@ function WBSTable (props) {
     const [closed_wbs, setClosedWbs] = useState({});
     const [filter_wp, setFilterWp] = useState('');
     const [bilding, setBilding] = useState(false);
+    const [selected_inner, setSelectedInner] = useState({});
 
     const data = props.source;
     const options = props.options;
     const start_id = props.start_id;
     const download = props.download;
     const style = props.style || {};
+
+    // 行の選択。selection は 'single' | 'multiple' | false(既定)。
+    // selected が渡されたときは controlled として扱い、内部状態は使わない。
+    const selection = props.selection===true ? 'single' : (props.selection || false);
+    const controlled = Array.isArray(props.selected);
+    const selected = controlled
+          ? props.selected.reduce((o, id) => { o[id] = true; return o; }, {})
+          : selected_inner;
 
     useEffect(() => {
         (async () => {
@@ -62,6 +71,19 @@ function WBSTable (props) {
         body: {
             row: {
                 visible: (number, v) => setColumns(core.changeColumnsVisible (number, v, columns)),
+                select: selection
+                    ? ((record) => {
+                        const next = core.toggleSelected(record._id, selected, selection);
+
+                        if (!controlled)
+                            setSelectedInner(next);
+
+                        if (props.onSelect)
+                            props.onSelect(core.selectedRecords(next, records),
+                                           core.selectedIds(next),
+                                           record);
+                    })
+                    : null,
             },
             wbs: {
                 switch: (action, _id) => setClosedWbs(core.contract(action, _id, closed_wbs)),
@@ -123,6 +145,7 @@ function WBSTable (props) {
                           callbacks={callbacks}
                           visible_wp={visible_wp}
                           closed_wbs={closed_wbs}
+                          selected={selected}
                           filter_wp={filter_wp}
                           style={style.body} />
            </table>}

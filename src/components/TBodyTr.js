@@ -94,20 +94,27 @@ function cells (props, clickOpner) {
     return out;
 };
 
-function trStyle (props) {
+function trStyle (props, selectable) {
+    const style = selectable ? { cursor: 'pointer' } : {};
+
     if (props.source._class==="WORKPACKAGE")
-        return  {}; // return  { fontWeight: 'bold' };
+        return  style; // return  { fontWeight: 'bold' };
 
     const x = props.max_level + 1 - props.source._level;
 
-    return {fontSize: 14 + x * 2};
+    return {...style, fontSize: 14 + x * 2};
 }
 
 
 function TBodyTr (props) {
-    trStyle(props);
+    const select = props.callbacks.body.row.select;
+
+    const clickRow = select ? (() => select(props.source)) : null;
 
     const clickOpner = (e) => {
+        // 折りたたみの矢印をクリックしたときは行の選択を発火させない。
+        e.stopPropagation();
+
         const span = (element) => {
             if (element.tagName==='SPAN')
                 return element;
@@ -123,7 +130,9 @@ function TBodyTr (props) {
     };
 
     return (
-        <tr style={trStyle(props)}>
+        <tr style={trStyle(props, !!select)}
+            className={props.selected ? 'is-selected' : null}
+            onClick={clickRow}>
           {cells(props, clickOpner)}
         </tr>
     );

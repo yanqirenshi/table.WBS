@@ -166,3 +166,22 @@ const columns = [
 | `cellByType(table, fallback?)` | a `contents` that picks `table[_node_type]`, falling back to `cellLabel` |
 | `withMargin(contents)` | wraps a `contents` with a `margin(d._level)` indent (for columns without `leveling`) |
 | `margin(level)` / `path(d)` / `to(d)` | the building blocks above |
+
+### (5) Row selection
+
+Pass `selection` to make rows clickable. Selected rows get Bulma's `is-selected` class.
+
+```
+<WBSTable source={wbs_source}
+          columns={columns}
+          selection="multiple"                       // 'single' | 'multiple' (true means 'single')
+          onSelect={(records, ids, clicked) => ...}/>  // called after every toggle
+```
+
+| prop | description |
+| --- | --- |
+| `selection` | `'single'` (one row at a time, click again to clear) or `'multiple'` (toggle each row). Omit or `false` to disable. |
+| `onSelect(records, ids, clicked)` | Called after every click with the selected records (in table order), their `_id`s, and the record that was clicked. |
+| `selected` | Optional array of `_id`s. When given, the table is *controlled*: it renders exactly these rows as selected and leaves updating them to your `onSelect`. |
+
+Clicking the collapse caret on a WBS row does not change the selection.

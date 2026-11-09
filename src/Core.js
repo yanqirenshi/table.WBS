@@ -61,6 +61,30 @@ export default class Core {
         return tmp;
     }
     /* **************************************************************** *
+     *  selection                                                       *
+     * **************************************************************** */
+    // selected: { [_id]: true } 形式。mode は 'single' か 'multiple'。
+    toggleSelected (_id, selected, mode) {
+        if (mode==='multiple') {
+            const tmp = {...selected};
+
+            if (tmp[_id])
+                delete tmp[_id];
+            else
+                tmp[_id] = true;
+
+            return tmp;
+        }
+
+        return selected[_id] ? {} : { [_id]: true };
+    }
+    selectedIds (selected) {
+        return Object.keys(selected).map(k => k * 1);
+    }
+    selectedRecords (selected, records) {
+        return records.filter(d => selected[d._id]);
+    }
+    /* **************************************************************** *
      *  filter                                                          *
      * **************************************************************** */
     filterWp (wbs, filter_wp) {
