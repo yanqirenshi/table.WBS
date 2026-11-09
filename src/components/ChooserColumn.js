@@ -10,6 +10,28 @@ const style = {
     },
 };
 
+function WidthInput (props) {
+    const column = props.column;
+    const key = props.name;
+    const value = (column.width && column.width[key]) || '';
+
+    const change = (e) => {
+        props.callbacks.body.row.width(column.number, key, e.target.value);
+    };
+
+    return (
+        <input className="input is-small"
+               type="number"
+               min="0"
+               step="10"
+               style={{width: 77}}
+               placeholder={key==='min' ? 'Min' : 'Max'}
+               title={key==='min' ? '最小幅 (px)' : '最大幅 (px)'}
+               value={value}
+               onChange={change} />
+    );
+}
+
 function ChooserColumn (props) {
     const columns = props.columns || [];
 
@@ -47,7 +69,13 @@ function ChooserColumn (props) {
                            <td>
                              {d.label}
                            </td>
-                           <td>--</td>
+                           <td>
+                             <div style={{display: 'flex', gap: 4, alignItems: 'center'}}>
+                               <WidthInput column={d} name="min" callbacks={props.callbacks}/>
+                               <span style={{color: '#888'}}>〜</span>
+                               <WidthInput column={d} name="max" callbacks={props.callbacks}/>
+                             </div>
+                           </td>
                            <td>
                              {d.leveling ? '○' : '×'}
                            </td>

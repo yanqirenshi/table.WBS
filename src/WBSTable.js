@@ -71,6 +71,7 @@ function WBSTable (props) {
         body: {
             row: {
                 visible: (number, v) => setColumns(core.changeColumnsVisible (number, v, columns)),
+                width: (number, key, v) => setColumns(core.changeColumnWidth(number, key, v, columns)),
                 select: selection
                     ? ((record) => {
                         const next = core.toggleSelected(record._id, selected, selection);
@@ -132,7 +133,8 @@ function WBSTable (props) {
            </div>}
 
           {!bilding &&
-           <table className="table is-fullwidth is-striped is-narrow is-hoverable"
+           <table className={'table is-striped is-narrow is-hoverable'
+                             + (core.fitsFullWidth(columns_filterd) ? ' is-fullwidth' : '')}
                   style={style}>
 
              <Comps.THead columns={columns_filterd}

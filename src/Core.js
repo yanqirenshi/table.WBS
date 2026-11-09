@@ -16,6 +16,7 @@ export default class Core {
             label: 'col-' + (i+1),
             required: false,
             visible: true,
+            width: { min: null, max: null },
             contents: (c, d) => {
                 return d._id;
             }
@@ -59,6 +60,48 @@ export default class Core {
         }
 
         return tmp;
+    }
+    /* **************************************************************** *
+     *  Width                                                           *
+     * **************************************************************** */
+    // key は 'min' か 'max'。v は px の数値。空文字・null・NaN・0 以下は未設定にする。
+    changeColumnWidth (number, key, v, columns) {
+        const n = (v===null || v===undefined || v==='') ? null : Number(v);
+        const value = (n===null || Number.isNaN(n) || n<=0) ? null : n;
+
+        return columns.map(d => {
+            if (d.number!==number)
+                return d;
+
+            return {...d, width: {...(d.width || {}), [key]: value}};
+        });
+    }
+    // th に当てるスタイルを返す。
+    // max を列の width として明示すると、テーブルの余り幅は幅指定のない列に配られ、
+    // この列は max より広がらなくなる。
+    widthCellStyle (column) {
+        const w = column.width || {};
+
+        return w.max ? { width: w.max } : {};
+    }
+    // 表示中の列がすべて max を持つと余り幅の行き先がないので、
+    // その場合はテーブルを横幅いっぱいに広げない。
+    fitsFullWidth (columns) {
+        return !columns.every(c => c.width && c.width.max);
+    }
+    // セルの中身を包む div に当てるスタイルを返す。
+    // table の td は max-width が効かないので、中の div で幅を抑える。
+    widthStyle (column) {
+        const w = column.width || {};
+        const out = {};
+
+        if (w.min) out.minWidth = w.min;
+        if (w.max) {
+            out.maxWidth = w.max;
+            out.overflowWrap = 'break-word';
+        }
+
+        return out;
     }
     /* **************************************************************** *
      *  selection                                                       *

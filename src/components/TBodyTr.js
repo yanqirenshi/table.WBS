@@ -4,6 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
+import Core from '../Core.js';
+
+const core = new Core();
+
 function makeLevelingSpace (level) {
     const out = [];
 
@@ -85,8 +89,10 @@ function cells (props, clickOpner) {
                 colSpan={colSpan(column.leveling, level, max_level)}
                 callbacks={callbacks}
                 nowrap={column.nowrap ? 'true' : null}>
-              {opener(row, column, props.closed_wbs, clickOpner)}
-              {column.contents(column, row, key)}
+              <div style={core.widthStyle(column)}>
+                {opener(row, column, props.closed_wbs, clickOpner)}
+                {column.contents(column, row, key)}
+              </div>
             </td>
         );
     }

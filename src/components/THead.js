@@ -1,5 +1,9 @@
 import React from 'react';
 
+import Core from '../Core.js';
+
+const core = new Core();
+
 const colSpan = (leveling, max_level) => {
     if (!leveling)
         return 1;
@@ -18,8 +22,10 @@ function THead (props) {
             {props.columns.map((d, i)=> {
                 return <th key={i}
                            colSpan={colSpan(d.leveling, max_level)}
-                           style={style}>
-                         {d.label}
+                           style={{...style, ...core.widthCellStyle(d)}}>
+                         <div style={core.widthStyle(d)}>
+                           {d.label}
+                         </div>
                        </th>;
             })}
           </tr>

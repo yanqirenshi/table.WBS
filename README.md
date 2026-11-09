@@ -167,7 +167,21 @@ const columns = [
 | `withMargin(contents)` | wraps a `contents` with a `margin(d._level)` indent (for columns without `leveling`) |
 | `margin(level)` / `path(d)` / `to(d)` | the building blocks above |
 
-### (5) Row selection
+### (5) Column width (Min / Max)
+
+Each column can have a minimum and maximum width in px. Set them in the column definition, or let users change them at runtime from the **Columns** panel (the Width cell has Min and Max inputs).
+
+```
+{
+    label: 'Description',
+    width: { min: 200, max: 400 },   // either side is optional
+    contents: (c, d) => d.description,
+},
+```
+
+`max` is applied as the column's `width` on the `<th>` and as `max-width` on a wrapper `<div>` inside each cell, so the column stays at `max` and long text wraps. The table's leftover width goes to the columns without `max`; when every visible column has one, the table stops stretching to the container width. A `leveling` column cannot shrink below the room its indent cells and caret need.
+
+### (6) Row selection
 
 Pass `selection` to make rows clickable. Selected rows get a `wbs-selected` class and a `#F2F2B0` background (text color is left as is). Override the background with `style.selected`:
 
