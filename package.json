@@ -1,8 +1,8 @@
 {
     "name": "@yanqirenshi/table.wbs",
-    "version": "0.0.21",
+    "version": "0.0.22",
     "description": "See: examples/",
-    "main": "dist/index.js",
+    "main": "dist/cjs/index.js",
     "directories": {
         "doc": "docs",
         "example": "example",
@@ -12,8 +12,11 @@
         "test": "jest",
         "test:w": "jest --watch",
         "test:coverage": "jest --coverage",
-        "transpile": "babel src -d dist --copy-files",
-        "prepublishOnly": "npm run transpile"
+        "transpile": "npm run clean && npm run transpile:esm && npm run transpile:cjs",
+        "prepublishOnly": "npm run transpile",
+        "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+        "transpile:esm": "babel src -d dist --no-babelrc --config-file ./babel.dist.config.js --env-name esm",
+        "transpile:cjs": "babel src -d dist/cjs --no-babelrc --config-file ./babel.dist.config.js --env-name cjs"
     },
     "repository": {
         "type": "git",
@@ -52,5 +55,13 @@
     "files": [
         "dist",
         "README.md"
-    ]
+    ],
+    "module": "dist/index.js",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "require": "./dist/cjs/index.js"
+        },
+        "./package.json": "./package.json"
+    }
 }
