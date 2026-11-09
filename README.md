@@ -126,3 +126,43 @@ To keep the previous behavior of delegating the click to your own handler instea
           columns={columns}
           download={() => myOwnExport()}/>
 ```
+
+### (4) Supporter
+
+`Supporter` bundles the cell renderers you would otherwise write by hand for every `contents`.
+Node-type paths and the link component are app concerns, so they are passed in through the constructor.
+
+```
+import WBSTable, { Supporter } from '@yanqirenshi/table.wbs';
+import { Link } from 'react-router-dom';
+
+const supporter = new Supporter({
+    paths:       { DB_TABLE: 'database/tables', SCREEN: 'screens' }, // keyed by _node_type (falls back to _class)
+    defaultPath: 'wbs',                                              // used when the type is not in paths
+    link:        (to, label, d) => <Link to={to}>{label}</Link>,     // omit to render the plain _id
+    marks:       { true: '○', false: '--' },                         // used by cellFlag
+    empty:       '',                                                 // shown for null / undefined values
+    indent:      '　',                                               // used by margin / withMargin
+});
+
+const columns = [
+    { label: 'ID',          leveling: true, required: true, contents: supporter.cellID },
+    { label: 'Name',        required: true,                 contents: supporter.cellLabel },
+    { label: 'Physical',    contents: supporter.cellByType({ DB_TABLE: supporter.cellCoreValue('physical_name') }) },
+    { label: 'Use',         contents: supporter.cellFlag('use') },
+    { label: 'Description', contents: supporter.cellDescription },
+];
+```
+
+| method | returns |
+| --- | --- |
+| `cellID(c, d)` | `link(to, d._id, d)` when `link` is set, otherwise `d._id` |
+| `cellIDNotLink(c, d)` | `d._id` |
+| `cellLabel(c, d)` | `d.label` |
+| `cellDescription(c, d)` | `d.description` |
+| `cellValue(key)` | a `contents` that returns `d[key]` |
+| `cellCoreValue(key)` | a `contents` that returns `d._core[key]` |
+| `cellFlag(key, marks?)` | a `contents` that shows `marks.true` when `d[key]` (or `d._core[key]`) is `true`, else `marks.false` |
+| `cellByType(table, fallback?)` | a `contents` that picks `table[_node_type]`, falling back to `cellLabel` |
+| `withMargin(contents)` | wraps a `contents` with a `margin(d._level)` indent (for columns without `leveling`) |
+| `margin(level)` / `path(d)` / `to(d)` | the building blocks above |
