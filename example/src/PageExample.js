@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import WBSTable from '@yanqirenshi/table.wbs';
 
 import * as WBS_DATA from './data.js';
 
 function PageExample() {
+    const [selected, setSelected] = useState([]);
+
     const columns = [
         {
             label: 'Code',
@@ -48,7 +50,17 @@ function PageExample() {
           <WBSTable source={wbs_source}
                     columns={columns}
                     options={options}
-                    style={style_table}/>
+                    style={style_table}
+                    selection="multiple"
+                    onSelect={(records) => setSelected(records)}/>
+
+          <div style={{marginTop: 22}} data-testid="selected">
+            <strong>Selected:</strong>
+            {' '}
+            {selected.length===0
+             ? <span style={{color: '#888'}}>(none)</span>
+             : selected.map(d => d._id + ' ' + d.label).join(', ')}
+          </div>
         </div>
     );
 }
